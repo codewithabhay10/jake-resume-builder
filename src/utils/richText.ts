@@ -5,13 +5,19 @@
  */
 
 /** True if the bullet has no visible text content. */
+// Zero-width space (U+200B) and BOM (U+FEFF) that contenteditable can leave behind.
+const zeroWidth = new RegExp(
+  `[${String.fromCharCode(0x200b)}${String.fromCharCode(0xfeff)}]`,
+  'g',
+);
+
 export function isHtmlEmpty(html: string): boolean {
   if (!html) return true;
   const text = html
-    .replace(/<br\s*\/?>(?=)/gi, '')
+    .replace(/<br\s*\/?>/gi, '')
     .replace(/<[^>]+>/g, '')
     .replace(/&nbsp;/gi, ' ')
-    .replace(/​/g, '')
+    .replace(zeroWidth, '')
     .trim();
   return text.length === 0;
 }

@@ -77,6 +77,7 @@ export type SectionCategory =
   | 'professional'
   | 'academic'
   | 'personal'
+  | 'technical'
   | 'custom';
 
 export interface BaseSection {

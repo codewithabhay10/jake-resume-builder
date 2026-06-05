@@ -124,9 +124,6 @@ const PREAMBLE = String.raw`%-------------------------
 
 /** Build the full Jake's-Resume .tex document from the resume sections. */
 export function generateLatex(sections: Section[]): string {
-  const personal = findPersonal(sections);
-  const social = findSocialLinks(sections);
-
   const out: string[] = [PREAMBLE, '', '\\begin{document}', ''];
 
   out.push(buildHeader(sections));
