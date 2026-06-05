@@ -1,0 +1,279 @@
+@import 'tailwindcss';
+
+/* ===========================================================================
+   Computer Modern (CMU Serif) — self-hosted web build of LaTeX's default font.
+   Files live in /public/fonts and are copied from the `computer-modern` npm
+   package. This is the EXACT font Jake's Resume compiles with.
+   =========================================================================== */
+@font-face {
+  font-family: 'CMU Serif';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/fonts/cmu-serif-roman.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'CMU Serif';
+  font-style: italic;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/fonts/cmu-serif-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'CMU Serif';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/cmu-serif-bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'CMU Serif';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/cmu-serif-bolditalic.woff2') format('woff2');
+}
+
+:root {
+  --cmu: 'CMU Serif', 'Latin Modern Roman', 'Times New Roman', serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* ===========================================================================
+   RESUME DOCUMENT — an HTML/CSS reproduction of the "Jake's Resume" template.
+   Metrics mirror the LaTeX source: letterpaper, 11pt, ~0.5in margins, the
+   titlerule under each \section, and the tight negative-vspace rhythm.
+   =========================================================================== */
+.resume-page {
+  width: 8.5in;
+  min-height: 11in;
+  background: #ffffff;
+  color: #000000;
+  font-family: var(--cmu);
+  /* 11pt documentclass: normalsize is ~10.9pt. */
+  font-size: 10.95pt;
+  line-height: 1.18;
+  /* \oddsidemargin -0.5in + \textwidth +1in  ->  ~0.5in side margins.
+     \topmargin -0.5in -> ~0.5in top. */
+  padding: 0.42in 0.5in 0.5in 0.5in;
+  box-sizing: border-box;
+  text-align: left;
+  font-variant-ligatures: common-ligatures;
+}
+
+.resume-page *,
+.resume-page *::before,
+.resume-page *::after {
+  box-sizing: border-box;
+}
+
+.resume-page a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.resume-page b,
+.resume-page strong {
+  font-weight: 700;
+}
+
+.resume-page i,
+.resume-page em {
+  font-style: italic;
+}
+
+/* ---------- Header (\begin{center} ... ) ---------- */
+.resume-header {
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.resume-name {
+  /* \Huge \scshape \textbf — ~24.9pt small-caps bold. */
+  font-size: 24pt;
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.5px;
+  line-height: 1.05;
+}
+
+.resume-contact {
+  /* \small contact line ~9.8pt, separated by " | ". */
+  font-size: 9.8pt;
+  margin-top: 3px;
+  line-height: 1.3;
+}
+
+.resume-contact .sep {
+  margin: 0 4px;
+}
+
+/* ---------- Section title + \titlerule ---------- */
+.resume-section {
+  margin-top: 5.5px;
+}
+
+.resume-section-title {
+  /* \large \scshape, not bold; full-width rule directly beneath. */
+  font-size: 13pt;
+  font-variant: small-caps;
+  letter-spacing: 0.3px;
+  line-height: 1.1;
+  border-bottom: 0.8pt solid #000;
+  padding-bottom: 1px;
+  margin-bottom: 3px;
+}
+
+/* ---------- \resumeSubHeadingListStart (leftmargin 0.15in, no labels) ---------- */
+.resume-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 0.15in;
+}
+
+.resume-entry {
+  margin-top: 2px;
+}
+
+.resume-entry:first-child {
+  margin-top: 0;
+}
+
+/* ---------- \resumeSubheading: two rows, left/right justified ---------- */
+.entry-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  /* tabular is 0.97\textwidth in the macro */
+  width: 97%;
+}
+
+.entry-row .left {
+  text-align: left;
+}
+
+.entry-row .right {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.entry-title {
+  font-weight: 700;
+}
+
+.entry-sub {
+  font-style: italic;
+  font-size: 9.9pt;
+}
+
+.entry-date {
+  font-size: 10.95pt;
+}
+
+.entry-date-italic {
+  font-style: italic;
+  font-size: 9.9pt;
+}
+
+/* ---------- \resumeProjectHeading (single row) ---------- */
+.project-heading {
+  font-size: 10.3pt;
+}
+
+.project-heading .proj-name {
+  font-weight: 700;
+}
+
+.project-heading .proj-tech {
+  font-style: italic;
+}
+
+/* ---------- \resumeItem bullets (nested itemize, \small, tiny markers) ---------- */
+.bullets {
+  list-style: disc;
+  margin: 1px 0 0 0;
+  padding-left: 0.28in;
+}
+
+.bullets li {
+  font-size: 9.9pt;
+  line-height: 1.2;
+  padding-left: 2px;
+  margin: 0;
+}
+
+.bullets li::marker {
+  font-size: 0.62em;
+}
+
+/* ---------- Technical Skills (bullet-free category lines) ---------- */
+.skills {
+  font-size: 9.9pt;
+  margin: 0;
+  padding: 0 0 0 0.15in;
+  line-height: 1.32;
+}
+
+.skills .skill-cat {
+  font-weight: 700;
+}
+
+/* ===========================================================================
+   On-screen preview scaler & print rules.
+   =========================================================================== */
+.preview-scaler {
+  transform-origin: top left;
+  box-shadow: 0 1px 8px rgba(15, 23, 42, 0.18);
+}
+
+@media print {
+  @page {
+    size: letter;
+    margin: 0;
+  }
+  html,
+  body {
+    background: #ffffff;
+  }
+  .resume-page {
+    box-shadow: none;
+    width: 8.5in;
+    min-height: 11in;
+  }
+}
+
+/* Thin, app-wide scrollbars for the editor/preview panes. */
+.thin-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.thin-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+  background-clip: content-box;
+}
+
+/* contenteditable placeholder */
+[data-placeholder]:empty::before {
+  content: attr(data-placeholder);
+  color: #94a3b8;
+  pointer-events: none;
+}
