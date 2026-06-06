@@ -3,6 +3,7 @@ import { useResumeStore } from '../../store/useResumeStore';
 import { SortableList } from '../common/SortableList';
 import { SortableItem } from '../common/SortableItem';
 import { EntryCard } from '../common/EntryCard';
+import { BulletList } from '../BulletList';
 import { Button, Field } from '../common/ui';
 import { PlusIcon } from '../icons';
 
@@ -64,6 +65,21 @@ export function EducationForm({
                       }
                       placeholder="Aug. 2018 - May 2021"
                     />
+                  </div>
+                  <div>
+                    <span className="text-xs font-medium text-slate-600">
+                      Grades / Achievements{' '}
+                      <span className="font-normal text-slate-400">
+                        (optional)
+                      </span>
+                    </span>
+                    <div className="mt-1.5">
+                      <BulletList
+                        sectionId={section.id}
+                        entryId={entry.id}
+                        bullets={entry.bullets}
+                      />
+                    </div>
                   </div>
                 </EntryCard>
               )}

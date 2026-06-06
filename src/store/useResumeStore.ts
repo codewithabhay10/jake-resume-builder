@@ -30,10 +30,11 @@ function reorderByIds<T extends { id: string }>(
   arr.splice(to, 0, moved);
 }
 
-/** Entries that carry rich-text bullets (experience / projects / generic). */
+/** Entries that carry rich-text bullets (education / experience / projects / generic). */
 type BulletEntry = { id: string; bullets: Bullet[] };
 function bulletEntriesOf(section: Section): BulletEntry[] | undefined {
   if (
+    section.type === 'education' ||
     section.type === 'experience' ||
     section.type === 'projects' ||
     section.type === 'generic'
@@ -323,6 +324,19 @@ export const useResumeStore = create<ResumeStore>()(
       name: STORAGE_KEY,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ sections: state.sections }),
+      version: 1,
+      // v0 -> v1: education entries gained a `bullets` array (grades/achievements).
+      migrate: (persisted) => {
+        const state = persisted as { sections?: Section[] } | undefined;
+        state?.sections?.forEach((s) => {
+          if (s.type === 'education') {
+            s.entries.forEach((e) => {
+              if (!Array.isArray(e.bullets)) e.bullets = [];
+            });
+          }
+        });
+        return state as { sections: Section[] };
+      },
     },
   ),
 );

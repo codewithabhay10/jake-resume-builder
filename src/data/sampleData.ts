@@ -48,6 +48,10 @@ export function createSampleSections(): Section[] {
           location: 'Georgetown, TX',
           degree: 'Bachelor of Arts in Computer Science, Minor in Business',
           dateRange: 'Aug. 2018 -- May 2021',
+          bullets: [
+            b('<b>GPA:</b> 3.9/4.0 — Dean’s List (all semesters)'),
+            b('<b>Relevant Coursework:</b> Data Structures, Algorithms, Databases, Operating Systems, Artificial Intelligence'),
+          ],
         },
         {
           id: uid('edu'),
@@ -55,6 +59,7 @@ export function createSampleSections(): Section[] {
           location: 'Bryan, TX',
           degree: "Associate's in Liberal Arts",
           dateRange: 'Aug. 2014 -- May 2018',
+          bullets: [],
         },
       ],
     },

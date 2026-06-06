@@ -34,6 +34,8 @@ export interface EducationEntry {
   location: string;
   degree: string;
   dateRange: string;
+  /** Optional grades / achievements bullets (GPA, honors, coursework, …). */
+  bullets: Bullet[];
 }
 
 export interface ExperienceEntry {

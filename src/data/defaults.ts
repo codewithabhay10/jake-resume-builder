@@ -26,6 +26,7 @@ export const emptyEducationEntry = (): EducationEntry => ({
   location: '',
   degree: '',
   dateRange: '',
+  bullets: [],
 });
 
 export const emptyExperienceEntry = (): ExperienceEntry => ({

@@ -71,6 +71,7 @@ function SectionBody({ section }: { section: Section }) {
                 c={e.degree}
                 d={e.dateRange}
               />
+              <Bullets bullets={e.bullets} />
             </li>
           ))}
         </ul>

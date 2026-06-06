@@ -71,8 +71,10 @@ export function buildContactItems(
     const url = link.url.trim();
     const label = link.label.trim();
     if (!url && !label) continue;
+    // Prefer the label as the visible text (e.g. "LinkedIn", "Portfolio"),
+    // falling back to a cleaned URL — matching modern Jake's-style headers.
     items.push({
-      display: url ? cleanUrlDisplay(url) : label,
+      display: label || cleanUrlDisplay(url),
       href: url ? ensureHttp(url) : undefined,
     });
   }

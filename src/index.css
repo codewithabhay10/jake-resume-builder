@@ -97,23 +97,22 @@ body {
 /* ---------- Header (\begin{center} ... ) ---------- */
 .resume-header {
   text-align: center;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 
 .resume-name {
-  /* \Huge \scshape \textbf — ~24.9pt small-caps bold. */
-  font-size: 24pt;
-  font-weight: 700;
-  font-variant: small-caps;
-  letter-spacing: 0.5px;
-  line-height: 1.05;
+  /* \Huge, mixed case, regular weight — large elegant Computer Modern Roman. */
+  font-size: 25pt;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  line-height: 1.12;
 }
 
 .resume-contact {
   /* \small contact line ~9.8pt, separated by " | ". */
   font-size: 9.8pt;
-  margin-top: 3px;
-  line-height: 1.3;
+  margin-top: 5px;
+  line-height: 1.35;
 }
 
 .resume-contact .sep {

@@ -158,7 +158,7 @@ function buildHeader(sections: Section[]): string {
   return [
     '%----------HEADING----------',
     '\\begin{center}',
-    `    \\textbf{\\Huge \\scshape ${name}} \\\\ \\vspace{1pt}`,
+    `    {\\Huge ${name}} \\\\ \\vspace{1pt}`,
     contactLine,
     '\\end{center}',
     '',
@@ -196,11 +196,13 @@ function wrapList(title: string, entries: string[]): string {
 }
 
 function eduEntry(e: EducationEntry): string {
-  return [
+  const lines = [
     '    \\resumeSubheading',
     `      {${latexEscape(e.institution)}}{${latexEscape(e.location)}}`,
     `      {${latexEscape(e.degree)}}{${latexEscapeDate(e.dateRange)}}`,
-  ].join('\n');
+  ];
+  lines.push(bulletBlock(e.bullets));
+  return lines.filter(Boolean).join('\n');
 }
 
 function expEntry(e: ExperienceEntry): string {
