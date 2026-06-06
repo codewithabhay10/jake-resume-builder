@@ -17,10 +17,16 @@ export function hasRenderableContent(section: Section): boolean {
       return true;
     case 'social':
       return section.links.some((l) => l.url.trim() || l.label.trim());
+    case 'generic':
+      // Bullets-only sections render nothing useful without bullets, and an
+      // empty itemize fails to compile — require at least one real bullet.
+      if (section.layout === 'bullets') {
+        return section.entries.some((e) => nonEmptyBullets(e.bullets).length > 0);
+      }
+      return section.entries.length > 0;
     case 'education':
     case 'experience':
     case 'projects':
-    case 'generic':
       return section.entries.length > 0;
     case 'skills':
       return section.categories.some((c) => c.name.trim() || c.items.trim());

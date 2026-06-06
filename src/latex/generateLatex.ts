@@ -3,14 +3,16 @@ import type {
   EducationEntry,
   ExperienceEntry,
   GenericEntry,
+  GenericLayout,
   ProjectEntry,
   Section,
   SkillCategory,
 } from '../types';
-import { latexEscape, latexEscapeDate } from './escape';
+import { latexEscape, latexEscapeDate, latexEscapeUrl } from './escape';
 import { richHtmlToLatex } from './richToLatex';
 import {
   buildContactItems,
+  ensureHttp,
   findPersonal,
   findSocialLinks,
   hasRenderableContent,
@@ -177,7 +179,13 @@ function buildSection(section: Section): string {
     case 'projects':
       return wrapList(title, section.entries.map(projectEntry));
     case 'generic':
-      return wrapList(title, section.entries.map(genericEntry));
+      if (section.layout === 'bullets') {
+        return buildGenericBullets(title, section.entries);
+      }
+      return wrapList(
+        title,
+        section.entries.map((e) => genericEntry(e, section.layout)),
+      );
     case 'skills':
       return buildSkills(title, section.categories);
     default:
@@ -227,23 +235,62 @@ function projectEntry(e: ProjectEntry): string {
   return lines.filter(Boolean).join('\n');
 }
 
-function genericEntry(e: GenericEntry): string {
-  const hasSub = e.subheading.trim() || e.location.trim();
+/** LaTeX-escape `text`, wrapping it in an \href (Jake's underline style) when
+ * a URL is supplied so the heading/subheading becomes a clickable link. */
+function linkedText(text: string, url: string): string {
+  const escaped = latexEscape(text);
+  const href = ensureHttp(url);
+  return href
+    ? `\\href{${latexEscapeUrl(href)}}{\\underline{${escaped}}}`
+    : escaped;
+}
+
+function genericEntry(e: GenericEntry, layout: GenericLayout): string {
+  const heading = linkedText(e.heading, e.headingUrl);
   const lines: string[] = [];
-  if (hasSub) {
+
+  if (layout === 'inline') {
+    // Heading and subheading on one line, date/location on the right.
+    const sub = e.subheading.trim()
+      ? ` $|$ \\textit{${linkedText(e.subheading, e.subheadingUrl)}}`
+      : '';
+    const right = [
+      e.date.trim() ? latexEscapeDate(e.date) : '',
+      e.location.trim() ? latexEscape(e.location) : '',
+    ]
+      .filter(Boolean)
+      .join(' $\\cdot$ ');
+    lines.push(
+      '    \\resumeProjectHeading',
+      `      {\\textbf{${heading}}${sub}}{${right}}`,
+    );
+  } else if (e.subheading.trim() || e.location.trim()) {
     lines.push(
       '    \\resumeSubheading',
-      `      {${latexEscape(e.heading)}}{${latexEscapeDate(e.date)}}`,
-      `      {${latexEscape(e.subheading)}}{${latexEscape(e.location)}}`,
+      `      {${heading}}{${latexEscapeDate(e.date)}}`,
+      `      {${linkedText(e.subheading, e.subheadingUrl)}}{${latexEscape(e.location)}}`,
     );
   } else {
     lines.push(
       '    \\resumeProjectHeading',
-      `      {\\textbf{${latexEscape(e.heading)}}}{${latexEscapeDate(e.date)}}`,
+      `      {\\textbf{${heading}}}{${latexEscapeDate(e.date)}}`,
     );
   }
+
   lines.push(bulletBlock(e.bullets));
   return lines.filter(Boolean).join('\n');
+}
+
+/** Bullets-only generic section: a flat itemize of every entry's bullets. */
+function buildGenericBullets(title: string, entries: GenericEntry[]): string {
+  const items = entries.flatMap((e) => nonEmptyBullets(e.bullets));
+  return [
+    `\\section{${title}}`,
+    '  \\begin{itemize}[leftmargin=0.15in]',
+    ...items.map((b) => `    \\resumeItem{${richHtmlToLatex(b.html)}}`),
+    '  \\end{itemize}',
+    '',
+  ].join('\n');
 }
 
 /** \resumeItemListStart ... \resumeItemListEnd — only when bullets exist. */

@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 import type { Bullet, GenericEntry, Section } from '../types';
 import {
   buildContactItems,
+  ensureHttp,
   findPersonal,
   findSocialLinks,
   hasRenderableContent,
@@ -112,11 +113,15 @@ function SectionBody({ section }: { section: Section }) {
         </ul>
       );
     case 'generic':
+      if (section.layout === 'bullets') {
+        // No headings — just one flat bullet list across all entries.
+        return <Bullets bullets={section.entries.flatMap((e) => e.bullets)} />;
+      }
       return (
         <ul className="resume-list">
           {section.entries.map((e) => (
             <li className="resume-entry" key={e.id}>
-              <GenericHeading entry={e} />
+              <GenericHeading entry={e} inline={section.layout === 'inline'} />
               <Bullets bullets={e.bullets} />
             </li>
           ))}
@@ -169,25 +174,74 @@ function Subheading({
   );
 }
 
-function GenericHeading({ entry }: { entry: GenericEntry }) {
-  const hasSub = entry.subheading.trim() || entry.location.trim();
-  if (hasSub) {
+/** Render `text`, wrapped in a link when `url` is non-empty. */
+function MaybeLink({ text, url }: { text: string; url: string }) {
+  const href = ensureHttp(url);
+  if (href) {
     return (
-      <Subheading
-        a={entry.heading}
-        b={entry.date}
-        c={entry.subheading}
-        d={entry.location}
-      />
+      <a href={href} target="_blank" rel="noopener noreferrer">
+        {text}
+      </a>
     );
   }
+  return <>{text}</>;
+}
+
+function GenericHeading({
+  entry,
+  inline,
+}: {
+  entry: GenericEntry;
+  inline: boolean;
+}) {
+  // Inline: heading and subheading share one line ("Heading | Subheading").
+  if (inline) {
+    const right = [entry.date.trim(), entry.location.trim()]
+      .filter(Boolean)
+      .join(' · ');
+    return (
+      <div className="entry-row">
+        <span className="left">
+          <span className="entry-title">
+            <MaybeLink text={entry.heading} url={entry.headingUrl} />
+          </span>
+          {entry.subheading.trim() && (
+            <>
+              {' | '}
+              <span className="entry-sub">
+                <MaybeLink text={entry.subheading} url={entry.subheadingUrl} />
+              </span>
+            </>
+          )}
+        </span>
+        {right && <span className="right entry-date">{right}</span>}
+      </div>
+    );
+  }
+
+  // Standard: bold heading + date row, italic subheading + location row.
+  const hasSub = entry.subheading.trim() || entry.location.trim();
   return (
-    <div className="entry-row">
-      <span className="left entry-title">{entry.heading}</span>
-      {entry.date.trim() && (
-        <span className="right entry-date">{entry.date}</span>
+    <>
+      <div className="entry-row">
+        <span className="left entry-title">
+          <MaybeLink text={entry.heading} url={entry.headingUrl} />
+        </span>
+        {entry.date.trim() && (
+          <span className="right entry-date">{entry.date}</span>
+        )}
+      </div>
+      {hasSub && (
+        <div className="entry-row">
+          <span className="left entry-sub">
+            <MaybeLink text={entry.subheading} url={entry.subheadingUrl} />
+          </span>
+          {entry.location.trim() && (
+            <span className="right entry-date-italic">{entry.location}</span>
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 }
 

@@ -179,11 +179,14 @@ export function createSampleSections(): Section[] {
       title: 'Certifications',
       removable: true,
       category: 'professional',
+      layout: 'inline',
       entries: [
         {
           id: uid('gen'),
           heading: 'AWS Certified Cloud Practitioner',
+          headingUrl: 'https://www.credly.com/badges/your-badge-id',
           subheading: 'Amazon Web Services',
+          subheadingUrl: 'https://aws.amazon.com/certification/',
           date: 'Mar. 2021',
           location: '',
           bullets: [],

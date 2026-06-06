@@ -55,7 +55,9 @@ export const emptySkillCategory = (name = ''): SkillCategory => ({
 export const emptyGenericEntry = (): GenericEntry => ({
   id: uid('gen'),
   heading: '',
+  headingUrl: '',
   subheading: '',
+  subheadingUrl: '',
   date: '',
   location: '',
   bullets: [emptyBullet()],

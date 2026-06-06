@@ -13,6 +13,14 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
     title: 'Certifications',
     category: 'professional',
     description: 'Professional certifications and credentials you have earned.',
+    layout: 'inline',
+  },
+  {
+    key: 'achievements',
+    title: 'Achievements',
+    category: 'professional',
+    description: 'A simple bulleted list of key achievements and highlights.',
+    layout: 'bullets',
   },
   {
     key: 'volunteer',

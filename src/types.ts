@@ -61,13 +61,23 @@ export interface SkillCategory {
   items: string;
 }
 
+/** How a generic add-on section lays out each entry:
+ *  - `standard`: bold heading + date row, italic subheading + location row.
+ *  - `inline`:   heading and subheading share one line (e.g. "Cert | Issuer").
+ *  - `bullets`:  no heading/subheading at all — just a flat list of bullets. */
+export type GenericLayout = 'standard' | 'inline' | 'bullets';
+
 /** Generic entry used by every add-on / custom section. Rendered in Jake's
  * style: bold heading + right date, optional italic subheading + right
  * location, then bullets. Fields left empty collapse gracefully. */
 export interface GenericEntry {
   id: string;
   heading: string;
+  /** Optional URL — turns the heading into a clickable link. */
+  headingUrl: string;
   subheading: string;
+  /** Optional URL — turns the subheading into a clickable link. */
+  subheadingUrl: string;
   date: string;
   location: string;
   bullets: Bullet[];
@@ -97,7 +107,11 @@ export type Section =
   | (BaseSection & { type: 'experience'; entries: ExperienceEntry[] })
   | (BaseSection & { type: 'projects'; entries: ProjectEntry[] })
   | (BaseSection & { type: 'skills'; categories: SkillCategory[] })
-  | (BaseSection & { type: 'generic'; entries: GenericEntry[] });
+  | (BaseSection & {
+      type: 'generic';
+      layout: GenericLayout;
+      entries: GenericEntry[];
+    });
 
 export type SectionType = Section['type'];
 
@@ -111,6 +125,8 @@ export interface SectionTemplate {
   title: string;
   category: Exclude<SectionCategory, 'core'>;
   description: string;
+  /** Default entry layout for sections created from this template. */
+  layout?: GenericLayout;
   /** Builds a fresh, empty generic section for this template. */
   seedEntry?: Partial<GenericEntry>;
 }

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { Bullet, PersonalData, Section } from '../types';
+import type { Bullet, GenericLayout, PersonalData, Section } from '../types';
 import {
   createInitialSections,
   emptyBullet,
@@ -54,6 +54,7 @@ export interface ResumeStore {
   addCustomSection: (title: string) => void;
   removeSection: (id: string) => void;
   renameSection: (id: string, title: string) => void;
+  setGenericLayout: (id: string, layout: GenericLayout) => void;
 
   // --- Personal ---
   updatePersonal: (patch: Partial<PersonalData>) => void;
@@ -134,6 +135,7 @@ export const useResumeStore = create<ResumeStore>()(
             title: tpl.title,
             removable: true,
             category: tpl.category,
+            layout: tpl.layout ?? 'standard',
             entries: [emptyGenericEntry()],
           });
         }),
@@ -146,6 +148,7 @@ export const useResumeStore = create<ResumeStore>()(
             title: title.trim() || 'Custom Section',
             removable: true,
             category: 'custom',
+            layout: 'standard',
             entries: [emptyGenericEntry()],
           });
         }),
@@ -162,6 +165,12 @@ export const useResumeStore = create<ResumeStore>()(
         set((s) => {
           const sec = s.sections.find((x) => x.id === id);
           if (sec) sec.title = title;
+        }),
+
+      setGenericLayout: (id, layout) =>
+        set((s) => {
+          const sec = s.sections.find((x) => x.id === id);
+          if (sec && sec.type === 'generic') sec.layout = layout;
         }),
 
       updatePersonal: (patch) =>
@@ -324,14 +333,23 @@ export const useResumeStore = create<ResumeStore>()(
       name: STORAGE_KEY,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ sections: state.sections }),
-      version: 1,
+      version: 3,
       // v0 -> v1: education entries gained a `bullets` array (grades/achievements).
+      // v1 -> v2: generic entries gained `headingUrl`/`subheadingUrl` (clickable links).
+      // v2 -> v3: generic sections gained a `layout` (standard/inline/bullets).
       migrate: (persisted) => {
         const state = persisted as { sections?: Section[] } | undefined;
         state?.sections?.forEach((s) => {
           if (s.type === 'education') {
             s.entries.forEach((e) => {
               if (!Array.isArray(e.bullets)) e.bullets = [];
+            });
+          }
+          if (s.type === 'generic') {
+            if (s.layout == null) s.layout = 'standard';
+            s.entries.forEach((e) => {
+              if (typeof e.headingUrl !== 'string') e.headingUrl = '';
+              if (typeof e.subheadingUrl !== 'string') e.subheadingUrl = '';
             });
           }
         });
