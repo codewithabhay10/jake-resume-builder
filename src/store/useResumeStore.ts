@@ -333,16 +333,22 @@ export const useResumeStore = create<ResumeStore>()(
       name: STORAGE_KEY,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ sections: state.sections }),
-      version: 3,
+      version: 4,
       // v0 -> v1: education entries gained a `bullets` array (grades/achievements).
       // v1 -> v2: generic entries gained `headingUrl`/`subheadingUrl` (clickable links).
       // v2 -> v3: generic sections gained a `layout` (standard/inline/bullets).
+      // v3 -> v4: project entries gained a `url` (clickable project name).
       migrate: (persisted) => {
         const state = persisted as { sections?: Section[] } | undefined;
         state?.sections?.forEach((s) => {
           if (s.type === 'education') {
             s.entries.forEach((e) => {
               if (!Array.isArray(e.bullets)) e.bullets = [];
+            });
+          }
+          if (s.type === 'projects') {
+            s.entries.forEach((e) => {
+              if (typeof e.url !== 'string') e.url = '';
             });
           }
           if (s.type === 'generic') {

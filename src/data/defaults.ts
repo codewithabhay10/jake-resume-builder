@@ -41,6 +41,7 @@ export const emptyExperienceEntry = (): ExperienceEntry => ({
 export const emptyProjectEntry = (): ProjectEntry => ({
   id: uid('proj'),
   name: '',
+  url: '',
   technologies: '',
   dateRange: '',
   bullets: [emptyBullet()],

@@ -60,6 +60,17 @@ export function ProjectsForm({
                         placeholder="Python, Flask, React, PostgreSQL, Docker"
                       />
                     </div>
+                    <div className="sm:col-span-2">
+                      <Field
+                        label="Project link"
+                        optional
+                        value={entry.url}
+                        onChange={(v) =>
+                          updateEntry(section.id, entry.id, { url: v })
+                        }
+                        placeholder="https://github.com/… or live site (makes the name clickable)"
+                      />
+                    </div>
                   </div>
                   <div>
                     <span className="text-xs font-medium text-slate-600">

@@ -94,19 +94,16 @@ function SectionBody({ section }: { section: Section }) {
           {section.entries.map((e) => (
             <li className="resume-entry" key={e.id}>
               <div className="entry-row project-heading">
-                <span className="left">
-                  <span className="proj-name">{e.name}</span>
-                  {e.technologies.trim() && (
-                    <>
-                      {' | '}
-                      <span className="proj-tech">{e.technologies}</span>
-                    </>
-                  )}
+                <span className="left proj-name">
+                  <MaybeLink text={e.name} url={e.url} />
                 </span>
                 {e.dateRange.trim() && (
                   <span className="right entry-date">{e.dateRange}</span>
                 )}
               </div>
+              {e.technologies.trim() && (
+                <div className="proj-tech">{e.technologies}</div>
+              )}
               <Bullets bullets={e.bullets} />
             </li>
           ))}

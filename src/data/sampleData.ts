@@ -121,6 +121,7 @@ export function createSampleSections(): Section[] {
         {
           id: uid('proj'),
           name: 'Gitlytics',
+          url: 'https://github.com/jake/gitlytics',
           technologies: 'Python, Flask, React, PostgreSQL, Docker',
           dateRange: 'June 2020 -- Present',
           bullets: [
@@ -133,6 +134,7 @@ export function createSampleSections(): Section[] {
         {
           id: uid('proj'),
           name: 'Simple Paintball',
+          url: 'https://www.spigotmc.org/resources/simple-paintball',
           technologies: 'Spigot API, Java, Maven, TravisCI, Git',
           dateRange: 'May 2018 -- May 2020',
           bullets: [

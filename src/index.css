@@ -67,7 +67,7 @@ body {
   line-height: 1.18;
   /* \oddsidemargin -0.5in + \textwidth +1in  ->  ~0.5in side margins.
      \topmargin -0.5in -> ~0.5in top. */
-  padding: 0.42in 0.5in 0.5in 0.5in;
+  padding: 0.32in 0.5in 0.5in 0.5in;
   box-sizing: border-box;
   text-align: left;
   font-variant-ligatures: common-ligatures;
@@ -196,8 +196,13 @@ body {
   font-weight: 700;
 }
 
-.project-heading .proj-tech {
+.project-heading .proj-name a {
+  text-decoration: none;
+}
+
+.proj-tech {
   font-style: italic;
+  font-size: 10.3pt;
 }
 
 /* ---------- \resumeItem bullets (nested itemize, \small, tiny markers) ---------- */

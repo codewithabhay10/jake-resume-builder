@@ -50,6 +50,9 @@ export interface ExperienceEntry {
 export interface ProjectEntry {
   id: string;
   name: string;
+  /** Optional URL — turns the project name into a clickable link
+   * (e.g. the GitHub repo or a deployed site). */
+  url: string;
   technologies: string;
   dateRange: string;
   bullets: Bullet[];

@@ -224,13 +224,19 @@ function expEntry(e: ExperienceEntry): string {
 }
 
 function projectEntry(e: ProjectEntry): string {
-  const left = e.technologies.trim()
-    ? `\\textbf{${latexEscape(e.name)}} $|$ \\emph{${latexEscape(e.technologies)}}`
-    : `\\textbf{${latexEscape(e.name)}}`;
+  // Clickable project name, but no underline (unlike the other headings).
+  const href = ensureHttp(e.url);
+  const escaped = latexEscape(e.name);
+  const name = href
+    ? `\\textbf{\\href{${latexEscapeUrl(href)}}{${escaped}}}`
+    : `\\textbf{${escaped}}`;
   const lines = [
     '    \\resumeProjectHeading',
-    `      {${left}}{${latexEscapeDate(e.dateRange)}}`,
+    `      {${name}}{${latexEscapeDate(e.dateRange)}}`,
   ];
+  if (e.technologies.trim()) {
+    lines.push(`    \\resumeSubSubheading{${latexEscape(e.technologies)}}{}`);
+  }
   lines.push(bulletBlock(e.bullets));
   return lines.filter(Boolean).join('\n');
 }
