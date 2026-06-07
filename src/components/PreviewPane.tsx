@@ -9,12 +9,17 @@ import { Button } from './common/ui';
 import { CopyIcon, DownloadIcon, PrintIcon, CheckIcon } from './icons';
 
 const PAGE_W = 8.5 * 96; // 816px at 96dpi
+const PAGE_H = 11 * 96; //  1056px at 96dpi
 
-const PRINT_STYLE = `
+/** Print CSS. `scale` (<= 1) is a shrink-to-fit zoom so the resume never
+ * spills a stray line onto a second page when exported to PDF. */
+function buildPrintStyle(scale: number): string {
+  return `
   @page { size: letter; margin: 0; }
   body { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .resume-page { box-shadow: none !important; }
+  .resume-page { box-shadow: none !important; zoom: ${scale}; }
 `;
+}
 
 export function PreviewPane({ sections }: { sections: Section[] }) {
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -48,10 +53,14 @@ export function PreviewPane({ sections }: { sections: Section[] }) {
     return () => ro.disconnect();
   });
 
+  // Shrink-to-fit: if the resume is taller than one Letter page, zoom it down
+  // just enough (with a small safety margin) so Export PDF stays single-page.
+  const printScale = Math.min(1, (PAGE_H - 8) / docHeight);
+
   const handlePrint = useReactToPrint({
     contentRef: docRef,
     documentTitle: resumeFileName(sections),
-    pageStyle: PRINT_STYLE,
+    pageStyle: buildPrintStyle(printScale),
   });
 
   const downloadTex = () => {

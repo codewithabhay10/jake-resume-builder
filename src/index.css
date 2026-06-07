@@ -67,7 +67,7 @@ body {
   line-height: 1.18;
   /* \oddsidemargin -0.5in + \textwidth +1in  ->  ~0.5in side margins.
      \topmargin -0.5in -> ~0.5in top. */
-  padding: 0.32in 0.5in 0.5in 0.5in;
+  padding: 0.25in 0.5in 0.5in 0.5in;
   box-sizing: border-box;
   text-align: left;
   font-variant-ligatures: common-ligatures;
@@ -121,7 +121,7 @@ body {
 
 /* ---------- Section title + \titlerule ---------- */
 .resume-section {
-  margin-top: 5.5px;
+  margin-top: 3px;
 }
 
 .resume-section-title {
@@ -143,7 +143,7 @@ body {
 }
 
 .resume-entry {
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .resume-entry:first-child {
